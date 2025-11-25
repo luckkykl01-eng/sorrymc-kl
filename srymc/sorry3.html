@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>From My Heart</title>
+
+<style>
+    body {
+        margin: 0;
+        padding: 0;
+        font-family: "Poppins", sans-serif;
+        background: linear-gradient(135deg, #f8eaf1, #e9e7ff);
+        height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        overflow: hidden;
+        position: relative;
+    }
+
+    .heart {
+        position: absolute;
+        font-size: 36px;
+        opacity: 0.17;
+        animation: float 6s infinite ease-in-out;
+        pointer-events: none;
+    }
+
+    @keyframes float {
+        0% { transform: translateY(0); }
+        50% { transform: translateY(-25px); }
+        100% { transform: translateY(0); }
+    }
+
+    .card {
+        width: 350px;
+        padding: 25px;
+        border-radius: 30px;
+        background: rgba(255,255,255,0.88);
+        backdrop-filter: blur(10px);
+        box-shadow: 0 10px 30px rgba(0,0,0,0.20);
+        text-align: center;
+        z-index: 10;
+        max-height: 85vh;
+        overflow: hidden;
+    }
+
+    h1 {
+        font-size: 22px;
+        margin-bottom: 18px;
+        color: #5a4b4b;
+        font-weight: 500;
+    }
+
+    .gif-row {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 20px;
+    }
+
+    .gif-bubble {
+        width: 120px;
+        height: 120px;
+        border-radius: 25px;
+        background: linear-gradient(180deg, #e1d6ff, #fdddf0);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        overflow: hidden;
+        box-shadow: 0 6px 18px rgba(0,0,0,0.15);
+    }
+
+    .gif-bubble img {
+        width: 110px;
+        height: auto;
+    }
+
+    .msg-title {
+        margin-top: 5px;
+        color: #6a5a5a;
+        font-size: 14px;
+        margin-bottom: 8px;
+    }
+
+    .msg-bubble {
+        width: 100%;
+        padding: 12px;
+        border-radius: 18px;
+        background: #ffffffdd;
+        font-size: 18px;
+        font-weight: 500;
+        color: #5a4b4b;
+        box-shadow: 0 6px 18px rgba(0,0,0,0.15);
+        transition: 0.4s ease;
+        cursor: pointer;
+    }
+
+    .msg-reveal {
+        margin-top: 10px;
+        padding: 12px;
+        width: 100%;
+        max-height: 140px;
+        overflow-y: auto;
+        background: #fef2f7;
+        border-radius: 16px;
+        color: #5a4b4b;
+        font-size: 14px;
+        line-height: 1.5;
+        display: none;
+        box-shadow: 0 6px 18px rgba(0,0,0,0.15);
+        scroll-behavior: smooth;
+    }
+
+    .final-btn {
+        margin-top: 14px;
+        padding: 12px 20px;
+        width: 80%;
+        background: linear-gradient(135deg, #ffb0d4, #e688ff);
+        border: none;
+        font-size: 15px;
+        font-weight: 600;
+        border-radius: 20px;
+        cursor: pointer;
+        color: #4d2c39;
+        box-shadow: 0 8px 22px rgba(0,0,0,0.18);
+        transition: 0.25s;
+        display: none;
+    }
+
+    .final-btn:hover {
+        transform: scale(1.05);
+    }
+</style>
+</head>
+
+<body>
+
+<!-- Floating Hearts (20) -->
+<div class="heart" style="top:5%; left:6%;">💗</div>
+<div class="heart" style="top:8%; left:70%; animation-delay:1s;">💜</div>
+<div class="heart" style="top:15%; left:40%; animation-delay:0.5s;">💕</div>
+<div class="heart" style="top:25%; left:85%; animation-delay:1.5s;">💘</div>
+<div class="heart" style="top:32%; left:18%; animation-delay:2s;">💗</div>
+
+<div class="heart" style="top:42%; left:60%; animation-delay:0.3s;">💖</div>
+<div class="heart" style="top:50%; left:5%; animation-delay:1.8s;">💞</div>
+<div class="heart" style="top:53%; left:78%; animation-delay:0.9s;">💓</div>
+<div class="heart" style="top:62%; left:33%; animation-delay:1.2s;">💕</div>
+<div class="heart" style="top:68%; left:90%; animation-delay:2.3s;">💜</div>
+
+<div class="heart" style="top:72%; left:15%; animation-delay:1.1s;">💗</div>
+<div class="heart" style="top:74%; left:55%; animation-delay:0.2s;">💘</div>
+<div class="heart" style="top:82%; left:42%; animation-delay:1.7s;">💞</div>
+<div class="heart" style="top:86%; left:80%; animation-delay:0.6s;">💖</div>
+<div class="heart" style="top:88%; left:22%; animation-delay:1.9s;">💓</div>
+
+<div class="heart" style="top:92%; left:48%; animation-delay:1.4s;">💕</div>
+<div class="heart" style="top:95%; left:10%; animation-delay:2.1s;">💗</div>
+<div class="heart" style="top:97%; left:72%; animation-delay:0.8s;">💜</div>
+<div class="heart" style="top:5%; left:50%; animation-delay:2.4s;">💞</div>
+<div class="heart" style="top:12%; left:30%; animation-delay:1.3s;">💖</div>
+
+<!-- CARD -->
+<div class="card">
+
+    <h1>Maan ja na Babu…</h1>
+
+    <div class="gif-row">
+        <div class="gif-bubble">
+            <img src="lkiss.gif" alt="Left Image">
+        </div>
+
+        <div class="gif-bubble">
+            <img src="angkt.gif" alt="Right Image">
+        </div>
+    </div>
+
+    <div class="msg-title">↓ Tap to see message ↓</div>
+
+    <div class="msg-bubble" onclick="revealMessage()">
+        I'm Sorry
+    </div>
+
+    <div id="hiddenMsg" class="msg-reveal">
+        I know I hurt you, and it breaks my heart knowing that I made you sad.  
+        You are someone I never want to hurt.  
+        Every second without your smile feels empty and heavy.  
+        I am trying every day to become better for you,  
+        to understand you more,  
+        to be patient,  
+        and to love you the way you deserve.  
+        You matter to me so much, babu.  
+        More than you will ever know.  
+    </div>
+
+    <button id="finalBtn" class="final-btn" onclick="goToFinalMessage()">Final Message ❤️</button>
+
+</div>
+
+<script>
+function revealMessage() {
+    const msg = document.getElementById("hiddenMsg");
+    const btn = document.getElementById("finalBtn");
+
+    msg.style.display = "block";
+
+    setTimeout(() => {
+        btn.style.display = "block";
+        btn.style.opacity = "1";
+    }, 350);
+}
+
+function goToFinalMessage() {
+    window.location.href = "sorry4.html";
+}
+</script>
+
+</body>
+</html>

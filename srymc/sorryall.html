@@ -1,0 +1,327 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Dear Kittu — All-in-One</title>
+<style>
+  :root{
+    --card-w:360px;
+    --accent1:#ff9ac8; --accent2:#ff6ab7;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;font-family:Poppins,system-ui,Segoe UI,Arial;background:linear-gradient(135deg,#ffb4e4,#d59dff);min-height:100vh;display:flex;align-items:center;justify-content:center;overflow:hidden}
+  /* container that holds "pages" */
+  .app{
+    width:var(--card-w);
+    max-width:94vw;
+    position:relative;
+  }
+
+  /* common card layout for each page */
+  .page{
+    width:100%;
+    min-height:520px;
+    border-radius:22px;
+    background:linear-gradient(180deg, rgba(255,215,235,0.96), rgba(255,180,215,0.94));
+    box-shadow: 0 18px 40px rgba(20,6,40,0.35);
+    padding:22px;
+    position:absolute;
+    left:0; top:0;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:flex-start;
+    gap:12px;
+    transition: transform .45s cubic-bezier(.2,.9,.25,1), opacity .35s ease;
+    transform-origin:center;
+  }
+  .hidden { opacity:0; pointer-events:none; transform: translateY(18px) scale(.995); }
+  .visible{ opacity:1; pointer-events:auto; transform: translateY(0) scale(1); }
+
+  .top-box{
+    width:100%; height:190px; border-radius:14px; overflow:hidden;
+    display:flex; align-items:center; justify-content:center;
+    background: linear-gradient(180deg, #ffdfe9, #ffc5e0);
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.35);
+  }
+  .top-box img{ width:170px; height:auto; animation:bob 2.4s infinite ease-in-out; }
+  @keyframes bob{0%{transform:translateY(0)}50%{transform:translateY(-6px)}100%{transform:translateY(0)}}
+
+  h1{margin:6px 0 0 0; color:#3a0035; font-size:24px}
+  p.lead{margin:0;color:#5a3a55;text-align:center}
+  .btn{margin-top:12px;padding:12px 14px;border-radius:16px;border:none;background:linear-gradient(180deg,var(--accent1),var(--accent2));color:#2b002b;font-weight:700;cursor:pointer;width:84%;box-shadow:0 8px 22px rgba(255,80,140,0.12)}
+  .btn:active{transform:scale(.995)}
+
+  /* hearts decoration: fixed across viewport */
+  .heart{position:fixed;font-size:36px;opacity:.17;animation:float 6s infinite ease-in-out;pointer-events:none;z-index:1}
+  @keyframes float{0%{transform:translateY(0)}50%{transform:translateY(-28px)}100%{transform:translateY(0)}}
+
+  /* Page 3 bubble styles */
+  .bubble{width:100%; padding:10px; border-radius:16px; margin-bottom:12px; background:linear-gradient(90deg,#ffd4e2,#ffb6cc); color:#5a4b4b; font-weight:600; font-size:15px; cursor:pointer; display:flex; align-items:center; justify-content:center; height:38px; opacity:0; transform:translateY(8px); transition:opacity .35s, transform .35s}
+  .bubble.revealed{opacity:1; transform:translateY(0)}
+  .bubble.b2{background:linear-gradient(90deg,#f5d3ff,#e8b6ff)}
+  .bubble.b3{background:linear-gradient(90deg,#d4c8ff,#c0affe); font-size:17px; height:44px}
+  .msg-reveal{margin-top:8px; width:100%; max-height:140px; overflow:auto; background:#fff6fb; padding:12px; border-radius:14px; color:#5a4b4b; display:none; box-shadow:0 8px 20px rgba(0,0,0,0.08); scroll-behavior:smooth}
+
+  /* Page4 images */
+  .gif-row{display:flex;gap:14px; width:100%; justify-content:space-between}
+  .gif-bubble{width:48%; height:130px; border-radius:18px; background:linear-gradient(180deg,#e1d6ff,#fdddf0); display:flex; align-items:center; justify-content:center; overflow:hidden; box-shadow:0 8px 22px rgba(0,0,0,0.08)}
+  .gif-bubble img{width:100%; height:auto; max-width:110px}
+
+  /* final page */
+  .final-card{padding:26px; text-align:center; background:linear-gradient(135deg,#f5d2e8,#d8c9ff); border-radius:18px}
+
+  /* music button */
+  .music-btn{position:fixed; right:18px; bottom:18px; width:64px; height:64px; border-radius:50%; background:linear-gradient(135deg,#ff9ac8,#ff6ab7); display:flex; align-items:center; justify-content:center; box-shadow:0 12px 30px rgba(0,0,0,0.22); cursor:pointer; z-index:999}
+  .music-heart{font-size:28px;color:#fff; transform-origin:center; animation:heart-breath 1.8s ease-in-out infinite}
+  @keyframes heart-breath{0%{transform:scale(1)}50%{transform:scale(1.08)}100%{transform:scale(1)}}
+  .music-btn.playing{box-shadow:0 18px 40px rgba(255,80,150,0.24)}
+  .music-btn.paused{opacity:.98}
+
+  /* small utility */
+  .muted-ind{font-size:11px;color:#fff;opacity:.9;position:absolute;bottom:4px;right:6px}
+  /* page transitions for accessibility */
+  .sr-only{position:absolute;left:-9999px}
+  @media (max-width:420px){ .page{min-height:600px} .top-box{height:160px} .gif-bubble{height:110px} }
+</style>
+</head>
+<body>
+
+<div class="app" aria-live="polite">
+
+  <!-- Floating hearts (20) - fixed around viewport -->
+  <div class="heart" style="left:5%; top:8%;">💗</div>
+  <div class="heart" style="left:82%; top:12%; animation-delay:1.1s;">💜</div>
+  <div class="heart" style="left:30%; top:18%; animation-delay:.4s;">💕</div>
+  <div class="heart" style="left:62%; top:22%; animation-delay:1.6s;">💗</div>
+  <div class="heart" style="left:15%; top:35%; animation-delay:.7s;">💖</div>
+  <div class="heart" style="left:86%; top:40%; animation-delay:2.1s;">💓</div>
+  <div class="heart" style="left:50%; top:45%; animation-delay:1s;">💗</div>
+  <div class="heart" style="left:22%; top:55%; animation-delay:1.6s;">💞</div>
+  <div class="heart" style="left:72%; top:60%; animation-delay:.3s;">💘</div>
+  <div class="heart" style="left:42%; top:65%; animation-delay:2s;">💕</div>
+  <div class="heart" style="left:8%; top:70%; animation-delay:1.3s;">💜</div>
+  <div class="heart" style="left:92%; top:75%; animation-delay:.4s;">💗</div>
+  <div class="heart" style="left:33%; top:80%; animation-delay:1.7s;">💞</div>
+  <div class="heart" style="left:63%; top:85%; animation-delay:.8s;">💓</div>
+  <div class="heart" style="left:18%; top:90%; animation-delay:2.3s;">💖</div>
+  <div class="heart" style="left:75%; top:92%; animation-delay:1.4s;">💘</div>
+  <div class="heart" style="left:50%; top:15%; animation-delay:2.5s;">💗</div>
+  <div class="heart" style="left:5%; top:30%; animation-delay:.6s;">💖</div>
+  <div class="heart" style="left:95%; top:50%; animation-delay:1.9s;">💕</div>
+  <div class="heart" style="left:55%; top:68%; animation-delay:.9s;">💗</div>
+
+  <!-- PAGE 1 -->
+  <section id="page1" class="page visible" role="region" aria-label="Page 1">
+    <div class="top-box"><img src="cutehug.gif" alt="Cute hug GIF"></div>
+    <h1>Dear Kittu ❤️</h1>
+    <p class="lead">Can we talk for a moment? There's something special I want to tell you.</p>
+    <button class="btn" onclick="nextPage()">Continue ❤️</button>
+  </section>
+
+  <!-- PAGE 2 -->
+  <section id="page2" class="page hidden" role="region" aria-label="Page 2">
+    <div class="top-box"><img src="hurtmc.gif" alt="Hurt GIF"></div>
+    <h1>I'm sorry…</h1>
+    <p class="lead">I know I hurt you and I feel very bad. Please continue.</p>
+    <button class="btn" onclick="nextPage()">Continue ❤️</button>
+  </section>
+
+  <!-- PAGE 3 -->
+  <section id="page3" class="page hidden" role="region" aria-label="Page 3">
+    <h1>Little things I want to tell you...</h1>
+    <p class="lead">Tap each one</p>
+
+    <div id="b1" class="bubble" onclick="revealBubble(1)"><span id="b1msg" style="display:none">I messed up… and I’m really sorry for that.</span></div>
+    <div id="b2" class="bubble b2" onclick="revealBubble(2)"><span id="b2msg" style="display:none">I promise I’ll be better for you. You mean so much to me.</span></div>
+    <div id="b3" class="bubble b3" onclick="revealBubble(3)"><span id="b3msg" style="display:none">Everything I feel for you is real — I want to make it right.</span></div>
+
+    <div id="page3Msg" class="msg-reveal" aria-hidden="true"></div>
+
+    <button class="btn" onclick="nextPage()">My message →</button>
+  </section>
+
+  <!-- PAGE 4 -->
+  <section id="page4" class="page hidden" role="region" aria-label="Page 4">
+    <h1>From my heart…</h1>
+    <div class="gif-row">
+      <div class="gif-bubble"><img src="gkiss.gif" alt="Left"></div>
+      <div class="gif-bubble"><img src="gkkiss.gif" alt="Right"></div>
+    </div>
+
+    <div class="msg-title">↓ Tap to see message ↓</div>
+    <div class="msg-bubble" style="width:100%; padding:12px; border-radius:18px; background:#ffffffdd; font-size:18px; font-weight:600; color:#5a4b4b; cursor:pointer;"
+         onclick="revealFinalBubble()">I'm Sorry</div>
+
+    <div id="finalReveal" class="msg-reveal" aria-hidden="true">
+      <!-- message content -->
+      <p style="margin:0 0 8px 0">I know I hurt you, and I’m truly sorry from the bottom of my heart.</p>
+      <p style="margin:0 0 8px 0">I never meant to be the reason behind your tears or sadness.</p>
+      <p style="margin:0 0 8px 0">You're my world — I promise to listen more and be better for you.</p>
+      <p style="margin:0 0 8px 0">Please let me make it right, slowly and gently.</p>
+    </div>
+
+    <div style="display:flex; gap:10px; width:100%; justify-content:center; margin-top:8px;">
+      <button class="btn" onclick="nextPage()">Continue</button>
+      <button class="btn" onclick="goToFinal()" style="width:46%;">Final Message</button>
+    </div>
+  </section>
+
+  <!-- PAGE 5 (FINAL) -->
+  <section id="page5" class="page hidden" role="region" aria-label="Final page">
+    <div class="final-card" style="width:100%; border-radius:18px; padding:18px;">
+      <h1 style="margin-top:0">Thank You ❤️</h1>
+      <p style="margin:6px 0 14px 0; color:#6a5a5a; line-height:1.6;">If you made it till here… I want you to know something important. Everything I said came from my heart. I’m not perfect, but I’m trying — for us. You matter to me more than anything. I don't want to lose what we have. Thank you for reading all of this… it means more than you know.</p>
+      <div style="color:#ff4f9b;font-weight:700;font-size:18px;text-shadow:0 0 12px #ff8ac7; margin-bottom:12px;">I love you, truly. 💗</div>
+      <button class="btn" onclick="finalLove()">💖 I Love You Too 💖</button>
+    </div>
+  </section>
+
+</div>
+
+<!-- Audio element (uses uploaded path). If running locally in VS Code, change src to "sorry.mp3" -->
+<audio id="bgAudio" preload="auto" crossorigin="anonymous">
+  <source src="/mnt/data/Sorry_320(PagaiWorld.com).mp3" type="audio/mpeg">
+  Your browser does not support audio.
+</audio>
+
+<!-- floating music button (shared) -->
+<div id="musicBtn" class="music-btn paused" aria-label="Play music">
+  <div class="music-heart">❤️</div>
+  <div class="muted-ind" style="display:none">muted</div>
+</div>
+
+<script>
+/* ----------------- Page navigation ----------------- */
+const totalPages = 5;
+let current = 1;
+const pages = [];
+for(let i=1;i<=totalPages;i++) pages[i] = document.getElementById('page'+i);
+
+function showPage(n){
+  if(n<1 || n>totalPages) return;
+  // hide current
+  for(let i=1;i<=totalPages;i++){
+    pages[i].classList.remove('visible');
+    pages[i].classList.add('hidden');
+  }
+  pages[n].classList.remove('hidden');
+  pages[n].classList.add('visible');
+  current = n;
+  window.scrollTo({top:0, behavior:'smooth'});
+  // announce for screen readers
+  document.title = `Dear Kittu — Page ${n}`;
+}
+
+function nextPage(){
+  const next = Math.min(totalPages, current+1);
+  showPage(next);
+}
+function goToFinal(){ showPage(5); }
+
+/* initialize */
+showPage(1);
+
+/* ----------------- Bubbles reveal logic (page3) ----------------- */
+function revealBubble(num){
+  const id = 'b'+num;
+  const msgId = id+'msg';
+  const bubble = document.getElementById(id);
+  const msg = document.getElementById(msgId);
+  if(msg.style.display === 'block'){ 
+    // if already open, close
+    msg.style.display = 'none';
+    bubble.classList.remove('revealed');
+    document.getElementById('page3Msg').style.display = 'none';
+    document.getElementById('page3Msg').textContent = '';
+    return;
+  }
+  msg.style.display = 'block';
+  bubble.classList.add('revealed');
+  // show the message area with content
+  const page3Msg = document.getElementById('page3Msg');
+  page3Msg.style.display = 'block';
+  page3Msg.textContent = msg.textContent;
+  page3Msg.setAttribute('aria-hidden','false');
+}
+
+/* ----------------- Final reveal on page4 ----------------- */
+function revealFinalBubble(){
+  const el = document.getElementById('finalReveal');
+  if(el.style.display === 'block'){ el.style.display='none'; el.setAttribute('aria-hidden','true'); }
+  else { el.style.display='block'; el.setAttribute('aria-hidden','false'); }
+}
+
+/* ----------------- Final button behavior ----------------- */
+function finalLove(){
+  alert('She smiled :)');
+}
+
+/* ----------------- Music player (shared across pages) ----------------- */
+const audio = document.getElementById('bgAudio');
+const musicBtn = document.getElementById('musicBtn');
+const musicHeart = musicBtn.querySelector('.music-heart');
+
+function saveMusicState(){
+  try{
+    localStorage.setItem('music.time', String(audio.currentTime || 0));
+    localStorage.setItem('music.playing', audio.paused ? 'false' : 'true');
+    localStorage.setItem('music.started', localStorage.getItem('music.started') || 'false');
+  }catch(e){}
+}
+window.addEventListener('beforeunload', saveMusicState);
+
+// On load, restore saved time/play state
+window.addEventListener('load', ()=>{
+  try{
+    const savedTime = parseFloat(localStorage.getItem('music.time') || '0');
+    const wasPlaying = localStorage.getItem('music.playing') === 'true';
+    const started = localStorage.getItem('music.started') === 'true';
+    if(!isNaN(savedTime) && savedTime > 0){
+      try { audio.currentTime = savedTime; } catch(e){}
+    }
+    // reflect button state
+    if(wasPlaying){
+      // try resume (may be blocked on mobile until user interacts)
+      audio.play().then(()=>{ musicBtn.classList.add('playing'); musicBtn.classList.remove('paused'); })
+      .catch(()=>{ musicBtn.classList.add('paused'); musicBtn.classList.remove('playing'); });
+    } else {
+      musicBtn.classList.add('paused'); musicBtn.classList.remove('playing');
+    }
+  }catch(e){}
+});
+
+// Toggle play/pause on click. On FIRST explicit play, jump to 30s per request.
+musicBtn.addEventListener('click', async ()=>{
+  const started = localStorage.getItem('music.started') === 'true';
+  if(audio.paused){
+    if(!started){
+      try{ audio.currentTime = 30; }catch(e){}
+      localStorage.setItem('music.started','true');
+    }
+    try{
+      await audio.play();
+      musicBtn.classList.add('playing'); musicBtn.classList.remove('paused');
+      localStorage.setItem('music.playing','true');
+    }catch(e){
+      console.warn('play blocked', e);
+    }
+  } else {
+    audio.pause();
+    musicBtn.classList.remove('playing'); musicBtn.classList.add('paused');
+    localStorage.setItem('music.playing','false');
+  }
+});
+
+// keep saving time each second while playing so navigation resumes position
+setInterval(()=>{ if(!audio.paused){ try{ localStorage.setItem('music.time', String(audio.currentTime)); }catch(e){} } }, 1000);
+
+/* Accessibility: allow keyboard right-arrow to go next */
+window.addEventListener('keydown', (e)=>{
+  if(e.key === 'ArrowRight') nextPage();
+});
+</script>
+
+</body>
+</html>

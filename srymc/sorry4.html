@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>My Last Message</title>
+
+<style>
+    body {
+        margin: 0;
+        padding: 0;
+        font-family: "Poppins", sans-serif;
+        background: linear-gradient(135deg, #ffe6ef, #e6d9ff);
+        height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        overflow: hidden;
+        position: relative;
+    }
+
+    .heart {
+        position: absolute;
+        font-size: 38px;
+        opacity: 0.17;
+        animation: float 6s infinite ease-in-out;
+        pointer-events: none;
+    }
+
+    @keyframes float {
+        0% { transform: translateY(0); }
+        50% { transform: translateY(-25px); }
+        100% { transform: translateY(0); }
+    }
+
+    .card {
+        width: 360px;
+        padding: 25px;
+        border-radius: 30px;
+        background: rgba(255,255,255,0.88);
+        backdrop-filter: blur(12px);
+        box-shadow: 0 10px 30px rgba(0,0,0,0.20);
+        text-align: center;
+        z-index: 10;
+        overflow: hidden;
+    }
+
+    .final-gif {
+        width: 160px;
+        margin-top: 10px;
+        margin-bottom: 15px;
+        animation: float 2.4s infinite ease-in-out;
+    }
+
+    h1 {
+        font-size: 24px;
+        font-weight: 600;
+        color: #5a4b4b;
+        margin-bottom: 6px;
+    }
+
+    h3 {
+        font-size: 14px;
+        color: #6a5a5a;
+        margin-bottom: 20px;
+        font-weight: 400;
+    }
+
+    /* Message box stays same size ALWAYS */
+    #hiddenMsg {
+        margin-top: 12px;
+        padding: 15px;
+        background: #ffe6f2;
+        border-radius: 18px;
+        color: #4d3d3d;
+        font-size: 14px;
+        line-height: 1.5;
+        display: none;
+        box-shadow: 0 6px 18px rgba(0,0,0,0.15);
+
+        /* FIXED BUBBLE SIZE */
+        max-height: 140px;
+        overflow-y: auto;
+        scrollbar-width: thin;
+    }
+
+    .btn {
+        padding: 12px 20px;
+        width: 80%;
+        background: linear-gradient(180deg, #e9b3c9, #d392b5);
+        border: none;
+        font-size: 15px;
+        font-weight: 600;
+        border-radius: 20px;
+        cursor: pointer;
+        color: #4d2c39;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.15);
+        transition: 0.2s;
+        margin-top: 8px;
+    }
+
+    .btn:hover {
+        transform: scale(1.03);
+    }
+
+    .endNote {
+        margin-top: 20px;
+        display: none;
+        font-size: 18px;
+        font-weight: bold;
+        color: #7a4961;
+    }
+</style>
+</head>
+
+<body>
+
+<!-- Floating Hearts (20) -->
+<div class="heart" style="top:5%; left:6%;">💗</div>
+<div class="heart" style="top:8%; left:70%; animation-delay:1s;">💜</div>
+<div class="heart" style="top:15%; left:40%; animation-delay:0.5s;">💕</div>
+<div class="heart" style="top:25%; left:85%; animation-delay:1.5s;">💘</div>
+<div class="heart" style="top:32%; left:18%; animation-delay:2s;">💗</div>
+
+<div class="heart" style="top:42%; left:60%; animation-delay:0.3s;">💖</div>
+<div class="heart" style="top:50%; left:5%; animation-delay:1.8s;">💞</div>
+<div class="heart" style="top:53%; left:78%; animation-delay:0.9s;">💓</div>
+<div class="heart" style="top:62%; left:33%; animation-delay:1.2s;">💕</div>
+<div class="heart" style="top:68%; left:90%; animation-delay:2.3s;">💜</div>
+
+<div class="heart" style="top:72%; left:15%; animation-delay:1.1s;">💗</div>
+<div class="heart" style="top:74%; left:55%; animation-delay:0.2s;">💘</div>
+<div class="heart" style="top:82%; left:42%; animation-delay:1.7s;">💞</div>
+<div class="heart" style="top:86%; left:80%; animation-delay:0.6s;">💖</div>
+<div class="heart" style="top:88%; left:22%; animation-delay:1.9s;">💓</div>
+
+<div class="heart" style="top:92%; left:48%; animation-delay:1.4s;">💕</div>
+<div class="heart" style="top:95%; left:10%; animation-delay:2.1s;">💗</div>
+<div class="heart" style="top:97%; left:72%; animation-delay:0.8s;">💜</div>
+<div class="heart" style="top:5%; left:50%; animation-delay:2.4s;">💞</div>
+<div class="heart" style="top:12%; left:30%; animation-delay:1.3s;">💖</div>
+
+<!-- MAIN CARD -->
+<div class="card">
+
+    <img src="loveu.gif" class="final-gif" alt="Final Gif">
+
+    <h1>Thank You…</h1>
+    <h3>For listening, for feeling, for staying, for being you.</h3>
+
+    <button class="btn" onclick="showLove()">Tap to open my heart ❤️</button>
+
+    <!-- FIXED-SIZE SCROLLING MESSAGE -->
+    <div id="hiddenMsg">
+        Loving you has been one of the most beautiful parts of my life.<br><br>
+        I know I’m not perfect, but my feelings for you are pure, deep, and real.<br><br>
+        If you let me… I want to continue loving you, supporting you, growing with you,  
+        and making your heart feel safe, valued, and cherished.<br><br>
+        Thank you for giving me the space to say all this.<br>
+        Thank you for being in my life.<br><br>
+        I love you… more than you know. ❤️
+    </div>
+
+    <div class="endNote" id="endNote">THE END ❤️</div>
+
+</div>
+
+<script>
+function showLove() {
+    // Only show message — DO NOT resize bubble
+    const msg = document.getElementById("hiddenMsg");
+    msg.style.display = "block";
+
+    // Show "The End" after a moment
+    setTimeout(() => {
+        document.getElementById("endNote").style.display = "block";
+    }, 1000);
+}
+</script>
+
+</body>
+</html>
